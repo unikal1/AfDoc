@@ -21,12 +21,12 @@ public class PermissionGroupPermissionMap {
     @Id
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false)
-    private PermissionGroup groupId;
+    private PermissionGroup permissionGroup;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "permission_id", referencedColumnName = "id", nullable = false)
-    private Permission permissionId;
+    private Permission permission;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "constructor_id")

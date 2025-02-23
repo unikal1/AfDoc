@@ -23,9 +23,9 @@ public class MemberPermissionMap {
     private Member member;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "permission_id", referencedColumnName = "id", nullable = false)
-    private Permission permissionId;
+    private Permission permission;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grantor_id")

@@ -21,10 +21,10 @@ public class PermissionGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "permission_group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "permissionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GroupMemberMap> members = new ArrayList<>();
 
-    @OneToMany(mappedBy = "permission_group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "permissionGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PermissionGroupPermissionMap> permissions = new ArrayList<>();
 
     @Column(name = "description", columnDefinition = "TEXT")

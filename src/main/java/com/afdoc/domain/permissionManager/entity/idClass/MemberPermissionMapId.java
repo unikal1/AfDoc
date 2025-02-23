@@ -13,19 +13,19 @@ import java.util.Objects;
 @AllArgsConstructor
 public class MemberPermissionMapId implements Serializable {
 
-    private Long memberId;
-    private Long permissionId;
+    private Long member;
+    private Long permission;
 
     @Override
     public boolean equals(Object o) {
         if(this == o) return true;
         if(!(o instanceof MemberPermissionMapId that)) return true;
-        return Objects.equals(memberId, that.memberId) &&
-               Objects.equals(permissionId, that.permissionId);
+        return Objects.equals(member, that.member) &&
+               Objects.equals(permission, that.permission);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memberId, permissionId);
+        return Objects.hash(member, permission);
     }
 }
