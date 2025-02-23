@@ -25,7 +25,7 @@ public class Project {
     private Member constructor;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MemberProjectMap> members = new ArrayList<>();
+    private List<MemberProjectMapRepository> members = new ArrayList<>();
 
     @Column(name = "name", nullable = false, unique = true, length = 30)
     private String name;
