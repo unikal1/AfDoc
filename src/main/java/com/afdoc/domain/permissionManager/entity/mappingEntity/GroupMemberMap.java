@@ -5,8 +5,9 @@ import com.afdoc.domain.memberManager.entity.Member;
 import com.afdoc.domain.permissionManager.entity.PermissionGroup;
 import com.afdoc.domain.permissionManager.entity.idClass.GroupMemberMapId;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,9 @@ import java.time.LocalDateTime;
 @Table(name = "GROUP_MEMBER_MAP")
 @IdClass(GroupMemberMapId.class)
 @Getter
+@EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(of = {"member", "permissionGroup"})
+@NoArgsConstructor
 public class GroupMemberMap {
 
     @Id
@@ -26,8 +30,13 @@ public class GroupMemberMap {
     @JoinColumn(name = "permission_group_id", referencedColumnName = "id")
     private PermissionGroup permissionGroup;
 
-    @Column(name = "joined_at", nullable = false)
+    @Column(name = "joined_at")
     @CreatedDate
     private LocalDateTime joinedAt;
+
+    public GroupMemberMap(Member member, PermissionGroup permissionGroup) {
+        this.member = member;
+        this.permissionGroup = permissionGroup;
+    }
 
 }
