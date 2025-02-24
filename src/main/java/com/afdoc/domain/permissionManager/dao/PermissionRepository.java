@@ -1,7 +1,9 @@
 package com.afdoc.domain.permissionManager.dao;
 
 
+import com.afdoc.domain.memberManager.entity.Member;
 import com.afdoc.domain.permissionManager.entity.Permission;
+import com.afdoc.domain.projectManager.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,12 +21,12 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
         FROM PermissionGroup pg
         JOIN pg.members gm
         JOIN pg.permissions pgp
-        WHERE pg.project.id = :projectId
-          AND gm.member.id = :memberId
+        WHERE pg.project = :project
+          AND gm.member= :member
     """)
     List<Permission> findDistinctPermissionsByProjectAndMember(
-            @Param("projectId") Long projectId,
-            @Param("memberId") Long memberId
+            @Param("project") Project project,
+            @Param("member") Member member
     );
 
 

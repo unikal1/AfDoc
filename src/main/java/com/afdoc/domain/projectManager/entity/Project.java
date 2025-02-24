@@ -86,6 +86,7 @@ public class Project {
     public boolean addPermissionGroup(PermissionGroup permissionGroup) {
         if(!permissionGroups.contains(permissionGroup)) {
             permissionGroups.add(permissionGroup);
+            permissionGroup.setProject(this);
             return true;
         }
         return false;
