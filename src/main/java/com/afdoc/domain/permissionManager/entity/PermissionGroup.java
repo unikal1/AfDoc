@@ -57,6 +57,7 @@ public class PermissionGroup {
     private LocalDateTime updatedAt;
 
     public boolean addMember(Member member) {
+        if(member.getId() == null) return false;
         GroupMemberMap groupMemberMap = new GroupMemberMap(member, this);
 
         if(!members.contains(groupMemberMap)) {
@@ -67,6 +68,7 @@ public class PermissionGroup {
     }
 
     public boolean removeMember(Member member) {
+        if(member.getId() == null) return false;
         GroupMemberMap groupMemberMap = new GroupMemberMap(member, this);
         if(!members.contains(groupMemberMap)) {
             members.remove(groupMemberMap);
@@ -76,6 +78,8 @@ public class PermissionGroup {
     }
 
     public boolean addPermission(Permission permission, Member constructor) {
+        if(permission.getId() == null) return false;
+        if(constructor.getId() == null) return false;
         PermissionGroupPermissionMap permissionGroupPermissionMap =
                 new PermissionGroupPermissionMap(this, permission, constructor);
         if(!permissions.contains(permissionGroupPermissionMap)) {
@@ -86,6 +90,7 @@ public class PermissionGroup {
     }
 
     public boolean removePermission(Permission permission) {
+        if(permission.getId() == null) return false;
         PermissionGroupPermissionMap permissionGroupPermissionMap =
                 new PermissionGroupPermissionMap(this, permission, null);
         if(!permissions.contains(permissionGroupPermissionMap)) {

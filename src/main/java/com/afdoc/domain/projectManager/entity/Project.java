@@ -62,7 +62,7 @@ public class Project {
     private LocalDateTime createdAt;
 
     public boolean addMember(Member member, String shownName, String shownImgUrl) {
-
+        if(member.getId() == null) return false;
         MemberProjectMap memberProjectMap = MemberProjectMap.builder()
                 .member(member)
                 .project(this)
@@ -80,10 +80,12 @@ public class Project {
     }
 
     public boolean addMember(Member member) {
+
         return addMember(member, null, null);
     }
 
     public boolean addPermissionGroup(PermissionGroup permissionGroup) {
+        if(permissionGroup.getId() == null) return false;
         if(!permissionGroups.contains(permissionGroup)) {
             permissionGroups.add(permissionGroup);
             permissionGroup.setProject(this);

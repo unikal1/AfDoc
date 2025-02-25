@@ -14,15 +14,18 @@ import java.util.Optional;
 
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission, Long> {
-    Optional<Permission> findByName(String name);
+
+
+
+    Optional<Permission> findByProjectAndBasePermission_Name(Project project, String name);
 
         @Query("""
-        SELECT DISTINCT pgp.permission
-        FROM PermissionGroup pg
-        JOIN pg.members gm
-        JOIN pg.permissions pgp
+        SELECT DISTINCT pgpm.permission
+        FROM PermissionGroupPermissionMap pgpm
+        JOIN pgpm.permissionGroup pg
+        JOIN pg.members pgm
         WHERE pg.project = :project
-          AND gm.member= :member
+          AND pgm.member = :member
     """)
     List<Permission> findDistinctPermissionsByProjectAndMember(
             @Param("project") Project project,

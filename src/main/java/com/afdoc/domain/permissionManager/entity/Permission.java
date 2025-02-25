@@ -11,7 +11,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "PERMISSION", uniqueConstraints = {@UniqueConstraint(columnNames = {"project_id", "category", "name"})})
+@Table(
+        name = "PERMISSION",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "base_permission_id"})
+)
 @Getter
 @Builder
 @NoArgsConstructor
@@ -28,14 +31,12 @@ public class Permission {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @Column(name = "category", nullable = false, length = 30)
-    private String category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "base_permission_id")
+    private BasePermission basePermission;
 
     @Column(name = "target_id", nullable = true)
     private Long targetId;
-
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
 
     @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
