@@ -1,6 +1,7 @@
 package com.afdoc.testUtils.createEntity;
 
 import com.afdoc.domain.memberManager.entity.Member;
+import com.afdoc.domain.permissionManager.entity.BasePermission;
 import com.afdoc.domain.permissionManager.entity.Permission;
 import com.afdoc.domain.permissionManager.entity.PermissionGroup;
 import com.afdoc.domain.projectManager.entity.Project;
@@ -27,61 +28,42 @@ public class PermissionManagerEntityFactory {
     public static final String description = "default_description";
     public static final String permissionGroupName = "permission_group_name";
 
+    // ====================== BasePermission ======================
+    public static BasePermission createBasePermission(String category, String name) {
+        return BasePermission.builder()
+                .category(category)
+                .name(name)
+                .build();
+    }
+
+    public static BasePermission createBasePermission() {
+        return createBasePermission(category, permissionName);
+    }
+
+
     // ======================== Permission ========================
 
     /**
      * Creates a Permission with the given project, category, targetId, and name.
      *
      * @param project   The associated Project.
-     * @param category  The category of the Permission.
-     * @param targetId  The target ID.
-     * @param name      The name of the Permission.
+     * @param basePermission The base permission to add.
      * @return A Permission object.
      */
-    public static Permission createPermission(Project project, String category, Long targetId, String name) {
+    public static Permission createPermission(BasePermission basePermission, Project project, Long targetId) {
         return Permission.builder()
                 .project(project)
-                .category(category)
+                .basePermission(basePermission)
                 .targetId(targetId)
-                .name(name)
                 .build();
     }
 
-    /**
-     * Creates a Permission using constructor username, project name, and permission name.
-     * Default values: category = "category", targetId = 1L.
-     *
-     * @param constructorUsername The username of the Member creating the Permission.
-     * @param projectName         The name of the Project.
-     * @param permissionName      The name of the Permission.
-     * @return A Permission object.
-     */
-    public static Permission createPermission(String constructorUsername, String projectName, String permissionName) {
-        Project project = ProjectManagerEntityFactory.createProject(constructorUsername, projectName);
-        return createPermission(project, category, targetId, permissionName);
-    }
-
-    /**
-     * Creates a Permission with the given project and name.
-     * Default values: category = "category", targetId = 1L.
-     *
-     * @param project The associated Project.
-     * @param name    The name of the Permission.
-     * @return A Permission object.
-     */
-    public static Permission createPermission(Project project, String name) {
-        return createPermission(project, category, targetId, name);
-    }
-
-    /**
-     * Creates a Permission using default values.
-     * Default values: project = ProjectManagerEntityFactory.createProject(), category = "category", targetId = 1L, name = "permission_name".
-     *
-     * @param project The associated Project.
-     * @return A Permission object.
-     */
-    public static Permission createPermission(Project project) {
-        return createPermission(project, permissionName);
+    public static Permission createPermission(BasePermission basePermission, Project project) {
+        return Permission.builder()
+                .project(project)
+                .basePermission(basePermission)
+                .targetId(targetId)
+                .build();
     }
 
     // ======================== PermissionGroup ========================
@@ -108,6 +90,12 @@ public class PermissionManagerEntityFactory {
         return permissionGroup;
     }
 
+    public static PermissionGroup createPermissionGroup(Project project, String name) {
+        return PermissionGroup.builder()
+                .project(project)
+                .name(name)
+                .build();
+    }
     /**
      * Creates a PermissionGroup using the same Member as both the group member and permission constructor.
      *
