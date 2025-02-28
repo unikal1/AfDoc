@@ -9,7 +9,8 @@ import java.util.List;
 public enum AccessRole {
     GUEST(List.of(
             "/login",
-            "/register"
+            "/register",
+            "/first-page"
     )),
     
     USER(List.of(

@@ -28,8 +28,12 @@ public class Member {
     @Column(name = "username", nullable = false, unique = true, length = 30)
     private String username;
 
-    @Column(name = "password", nullable = false, length = 30)
+    @Column(name = "password", nullable = false, length = 70)
     private String password;
+
+    @Column(name = "role", nullable = false, length = 10)
+    @Builder.Default
+    private String role = "ROLE_USER";
 
     @Column(name = "name", nullable = false, length = 30)
     private String name;
