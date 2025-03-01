@@ -29,6 +29,7 @@ public class UserAuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthApiDto.Register dto) {
+        System.out.println("register : " + dto.getUsername());
         memberService.createMember(dto);
         return ResponseEntity.ok("success");
     }

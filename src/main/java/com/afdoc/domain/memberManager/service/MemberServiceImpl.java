@@ -22,7 +22,6 @@ public class MemberServiceImpl implements MemberService {
                 .username(dto.getUsername())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .name(dto.getName())
-                .imgUrl(dto.getImgUrl())
                 .build();
 
         memberRepository.save(member);
