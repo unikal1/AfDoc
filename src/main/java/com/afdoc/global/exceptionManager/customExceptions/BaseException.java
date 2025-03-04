@@ -2,7 +2,7 @@ package com.afdoc.global.exceptionManager.customExceptions;
 
 import org.springframework.http.HttpStatus;
 
-//base exception for custom Exception!!
+//base exception for custom Exception!!!
 public class BaseException extends RuntimeException {
     private final HttpStatus httpStatus;
 
