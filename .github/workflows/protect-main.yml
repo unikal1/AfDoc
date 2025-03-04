@@ -12,19 +12,21 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2  # 이전 커밋(HEAD~1)까지 가져오도록 설정
+          fetch-depth: 2  # 이전 커밋까지 가져와서 diff 가능하도록 설정
 
-      - name: Check changed files
+      - name: Get changed files
         run: |
-          # 기존 파일과의 파일 변경 조회
+          # 기존 파일과의 변경 조회
           CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # 만약 src/에서 파일 변경 시 실패 처리
-          if echo "$CHANGED_FILES" | grep -E '^src/'; then
-            echo "❌ Error: You cannot commit directly to main when changing 'src/'. Please use a pull request."
-            exit 1
-          else
-            echo "✅ No changes in 'src/', commit allowed."
-          fi
+          # 변경된 파일을 하나씩 확인하여 src/ 디렉터리 내 파일이 있는지 검사
+          for file in $CHANGED_FILES; do
+            if [[ "$file" == src/* ]]; then
+              echo "❌ Error: You cannot commit directly to main when changing 'src/'. Please use a pull request."
+              exit 1
+            fi
+          done
+
+          echo "✅ No changes in 'src/', commit allowed."
