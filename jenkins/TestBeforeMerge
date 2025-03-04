@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Test') {
+            when {
+                allOf {
+                    expression { return env.CHANGE_ID != null }  // PR에서만 실행
+                    expression { return env.CHANGE_TARGET == 'main' }  // PR의 대상이 main인지 확인
+                }
+            }
+            steps {
+                sh './gradlew clean test' 
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ 테스트 성공!"
+        }
+        failure {
+            echo "❌ 테스트 실패!"
+            script {
+                currentBuild.result = 'FAILURE'
+            }
+        }
+    }
+}
