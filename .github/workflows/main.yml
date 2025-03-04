@@ -1,0 +1,48 @@
+name: PR Trigger Jenkins Test
+
+on:
+  pull_request:
+    branches:
+      - main  # main 브랜치로 병합되는 PR일 때만 실행
+
+jobs:
+  trigger-jenkins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Webhook to Jenkins
+        run: |
+          curl -X POST "$JENKINS_URL/job/$JENKINS_JOB_NAME/buildWithParameters" \
+               --user "$JENKINS_USER:$JENKINS_API_TOKEN" \
+               --data-urlencode "GITHUB_PR_NUMBER=${{ github.event.pull_request.number }}" \
+               --data-urlencode "GITHUB_REPO=${{ github.repository }}"
+
+      - name: Wait for Jenkins Test Completion
+        run: |
+          echo "Waiting for Jenkins job to complete..."
+          sleep 30  # 초기 대기 시간
+          
+          for i in {1..20}; do
+            BUILD_STATUS=$(curl -s "$JENKINS_URL/job/$JENKINS_JOB_NAME/lastBuild/api/json" \
+                            --user "$JENKINS_USER:$JENKINS_API_TOKEN" | jq -r '.result')
+
+            echo "Current Jenkins build status: $BUILD_STATUS"
+
+            if [[ "$BUILD_STATUS" == "SUCCESS" ]]; then
+              echo "✅ Jenkins test passed!"
+              exit 0
+            elif [[ "$BUILD_STATUS" == "FAILURE" || "$BUILD_STATUS" == "ABORTED" ]]; then
+              echo "❌ Jenkins test failed!"
+              exit 1
+            fi
+
+            echo "Jenkins build still running... Checking again in 10 seconds."
+            sleep 10
+          done
+
+          echo "❌ Timeout: Jenkins build did not complete in time."
+          exit 1
+    env:
+      JENKINS_URL: "http://jack8226.ddns.net:3004"  # Jenkins 서버 URL
+      JENKINS_JOB_NAME: "test-befoer-merge"  # Jenkins Job 이름
+      JENKINS_USER: "sang"  # Jenkins 사용자명
+      JENKINS_API_TOKEN: "11ff7ab213725b6d16d240fd70292b6013"  # Jenkins API 토큰 (Jenkins에서 발급)
