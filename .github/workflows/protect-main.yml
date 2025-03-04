@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # 이전 커밋(HEAD~1)까지 가져오도록 설정
 
       - name: Check changed files
         run: |
@@ -19,10 +21,10 @@ jobs:
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
-          # 만약 src/에서 파일 변경 시 실패
+          # 만약 src/에서 파일 변경 시 실패 처리
           if echo "$CHANGED_FILES" | grep -E '^src/'; then
-            echo "not direct commit to main branch when change source root"
+            echo "❌ Error: You cannot commit directly to main when changing 'src/'. Please use a pull request."
             exit 1
           else
-            echo "commit success"
+            echo "✅ No changes in 'src/', commit allowed."
           fi
