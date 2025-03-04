@@ -3,7 +3,7 @@ name: Protect Direct Commits to Main
 on:
   push:
     branches:
-    - main
+      - main
 
 jobs:
   check-main-commit:
@@ -15,7 +15,7 @@ jobs:
       - name: Check changed files
         run: |
           # 기존 파일과의 파일 변경 조회
-          CHANGED_FILE=$(git diff --name-only HEAD~1 HEAD)
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
           echo "Changed files:"
           echo "$CHANGED_FILES"
 
