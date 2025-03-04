@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'GITHUB_PR_NUMBER', defaultValue: '', description: 'GitHub PR Number')
+        string(name: 'GITHUB_REPO', defaultValue: '', description: 'GitHub Repository')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,23 +15,20 @@ pipeline {
 
         stage('Test') {
             when {
-                allOf {
-                    expression { return env.CHANGE_ID != null }  // PR에서만 실행
-                    expression { return env.CHANGE_TARGET == 'main' }  // PR의 대상이 main인지 확인
-                }
+                expression { return env.GITHUB_PR_NUMBER != '' }  // PR이 있을 때만 실행
             }
             steps {
-                sh './gradlew clean test' 
+                sh './gradlew clean test'  // Maven 사용 시 ./mvnw test
             }
         }
     }
 
     post {
         success {
-            echo "✅ 테스트 성공!"
+            echo "✅ Tests passed! Reporting to GitHub..."
         }
         failure {
-            echo "❌ 테스트 실패!"
+            echo "❌ Tests failed! Reporting to GitHub..."
             script {
                 currentBuild.result = 'FAILURE'
             }
