@@ -1,0 +1,28 @@
+name: Protect Direct Commits to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-main-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Check changed files
+        run: |
+          # 기존 파일과의 파일 변경 조회
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          # 만약 src/에서 파일 변경 시 실패
+          if echo "$CHANGED_FILES" | grep -E '^src/'; then
+            echo "not direct commit to main branch when change source root"
+            exit 1
+          else
+            echo "commit success"
+          fi
